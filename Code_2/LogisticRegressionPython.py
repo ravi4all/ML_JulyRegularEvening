@@ -49,26 +49,26 @@ def accuracy_metrics(actual, predicted):
 def predictions(row,coef):
     ypred = coef[0]
     for i in range(len(row) - 1):
-        ypred += coef[i+1] * row[i]    
+        ypred += coef[i+1] * row[i]  
     return 1 / (1 + math.exp(-ypred))
 
 # train test split
 def cross_validation(n_folds, dataset):
     datasetCopy = list(dataset)
-    fold_size = len(dataset) / n_folds
+    fold_size = int(len(dataset) / n_folds)
     folds = []
     
     for i in range(n_folds):
         fold = []
         
-        while len(fold) <= fold_size:
+        while len(fold) < fold_size:
             index = random.randrange(len(datasetCopy))
             fold.append(datasetCopy.pop(index))
         folds.append(fold)
     
     return folds
 
-def evaluateAlgorithm(dataset, n_folds, algorithm):
+def evaluateAlgorithm(dataset, n_folds, algorithm, nb_epoch, learning_rate):
     scores = []
     
     folds = cross_validation(n_folds, dataset)
@@ -76,28 +76,42 @@ def evaluateAlgorithm(dataset, n_folds, algorithm):
     for fold in folds:
         train = list(folds)
         train.remove(fold)
-        
+        train = sum(train, [])
         test = []
         for row in fold:
-            rowcopy = row
+            rowcopy = list(row)
             rowcopy[-1] = None
             test.append(rowcopy)
             
         actual = [row[-1] for row in fold]
-        predicted = algorithm()
+        predicted = algorithm(train, test, learning_rate, nb_epoch)
         
         score = accuracy_metrics(actual, predicted)
         scores.append(score)
         
     return scores
         
+def sgd_logistic(dataset, learning_rate, nb_epoch):
+    b = [0] * nb_epoch
+    
+    for epoch in range(nb_epoch):
+        for row in dataset:
+            yhat = predictions(row,b)
+            loss = row[-1] - yhat
+            b[0] = b[0] + learning_rate * loss * yhat * (1 - yhat)
+            for i in range(len(row) - 1):
+                b[i+1] = b[i+1] + learning_rate * loss * yhat * (1-yhat) * row[i]
+    return b
+
+def logisticRegression(train, test, learning_rate, nb_epoch):
+    y_pred = []
+    coef = sgd_logistic(train, learning_rate, nb_epoch)
+    for row in test:
+        pred = predictions(row, coef)
+        pred = round(pred)
+        y_pred.append(pred)
         
-
-def sgd_logistic():
-    pass
-
-def logisticRegression():
-    pass
+    return y_pred
 
 filename = 'pima-indians-diabetes.data.csv'
 dataset = load_dataset(filename)
@@ -105,5 +119,8 @@ str_to_float(dataset)
 minmaxData = minmax(dataset)
 normalization(dataset)
 
-
-
+n_folds = 5
+nb_epoch = 1000
+learning_rate = 0.01
+accuracy = evaluateAlgorithm(dataset, n_folds, logisticRegression, nb_epoch, learning_rate)
+print(accuracy)
