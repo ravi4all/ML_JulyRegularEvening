@@ -17,11 +17,11 @@ while True:
             faceComp = cv2.resize(faceComponent, (50,50))
             cv2.rectangle(img, (x,y), (x+w, y+h), (0,0,255), 4)
 
-            if len(data) <= 500:
+            if len(data) <= 20:
                 data.append(faceComp)
 
         cv2.imshow('result', img)
-        if cv2.waitKey(1) == 27 or len(data) >= 500:
+        if cv2.waitKey(1) == 27 or len(data) >= 20:
             break
     else:
         print("Some Error")
