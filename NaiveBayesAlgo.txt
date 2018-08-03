@@ -1,0 +1,20 @@
+1. Create dummy data
+# target variable
+data['Gender'] = ['male','male','male','male',
+                  'female','female','female','female']
+
+# feature variables
+data['Height'] = [6,5.92,5.58,5.92,5,5.5,5.42,5.75]
+data['Weight'] = [81,86,77,74,45,68,58,68]
+data['Foot_Size'] = [12,11,12,10,6,8,7,9]
+
+2. Input 1 test data to get prediction
+3. Calculate no of male and female
+4. get total observations
+5. Find probability of male and female
+6. Find mean and variance of data using groupby with gender
+7. Get mean for every column for male and female
+8. Get variance for every column for male and female
+9. Build function for P(X|Y) and pass observation, mean and variance as argument
+10. Use likelihood formula and the return the likelihood from function
+11. find posterior probability for male and female by multiplying probability of male with every column's mean and variance
