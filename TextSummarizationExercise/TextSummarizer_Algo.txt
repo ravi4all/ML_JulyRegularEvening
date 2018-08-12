@@ -1,0 +1,10 @@
+Text Summarizer
+Step 1. Get some text
+Step 2. Use stemmer and remove stopwords
+Step 3. Apply word tokenization
+Step 4. Make a frequency table which contains count of every word
+Step 5. Apply Sentence tokenizer
+Step 6. Now for every word count the frequency of word in each sentence 
+Step 7. Calculate sum of all frequencies that was calculated in step 6
+Step 8. Calculate Average
+Step 9. Now compare sentence value greater than some value like 1.2 and multiply with average
