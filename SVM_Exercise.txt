@@ -1,0 +1,5 @@
+1. Train digits data using svm
+2. prediction on test data
+3. Use opencv to upload a image of any random digit
+4. reshape that image into 8x8
+5. recognize the image of digit
