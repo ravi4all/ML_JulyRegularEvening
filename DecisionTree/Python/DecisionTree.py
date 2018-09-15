@@ -81,11 +81,37 @@ def gini_index(class_values, groups):
             
     return gini
 
-def test_split():
-    pass
+def test_split(value,index, dataset):
+    left, right = list(), list()
+    for row in dataset:
+        if row[index] < value:
+            left.append(row)
+        else:
+            right.append(row)
+            
 
-def get_split():
-    pass
+def get_split(dataset, n_features):
+    
+    class_values = list(set([row[-1] for row in dataset]))
+    b_index, b_value, b_score, b_groups = 999,999,999,None
+    features = list()
+    
+    while len(features) < n_features:
+        index = randrange(len(dataset[0] - 1))
+        if index not in features:
+            features.append(index)
+    
+    for index in features:
+        for row in dataset:
+            groups = test_split(row[index], index, dataset)
+            gini = gini_index(class_values, groups)
+            
+            if gini < b_score:
+#                print(gini)
+                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+                
+                
+    return {'index':b_index,'value':b_value, 'groups':b_groups}
 
 def to_terminal():
     pass
